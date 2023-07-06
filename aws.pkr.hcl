@@ -1,47 +1,47 @@
-{
-    "builders": [
-        {
-
-        "type": "amazon-ebs",
-        "access_key":"AKIATVJI7JQXK4YESPAI",
-        "secret_key":"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",
-        "region": "us-west-1",
-        "ami_name": "LINUX_MY_IMAGE-{{timestamp}}",
-        "source_ami": "ami-0ef262972e641bb3e",
-        "instance_type": "t2.micro",
-        "ssh_username":"ec2-user",
-        "ssh_agent_auth": "false",
-         "associate_public_ip_address": "true",
-         "ssh_interface": "public_ip",
-         
-
-        }
-        
-
-     ],
-    
-    "provisioners": [
-        {
-          
-            "type": "file",
-            "source": "provisioner.sh",
-            "destination": "/tmp/provisioner.sh"
-        },
-        
-        
-          {"type": "shell",
-            "inline": [
-                "chmod a+x /tmp/provisioner.sh",
-                "ls -la /tmp",
-                "pwd",
-                "/tmp/provisioner.sh"]
+source "amazon-ebs" "amazon-linux" {
+  region          = "us-east-1"
+  ami_name        = "ami-version-1.0.1-{{timestamp}}"
+  instance_type   = "t2.micro"
+  source_ami      = "ami-06b09bfacae1453cb"
+  access_key  = "AKIATVJI7JQXK4YESPAI"
+  secret_key  = "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"
+  ssh_username    = "ec2-user"
+  ami_users       = ["251878394926"]
+  ami_regions     = [
+                      "us-east-1"
+                    ]
+}
 
 
-           }
-        
-    ]
+
+build {
+  
+  sources = [ "source.amazon-ebs.amazon-linux"]
+
+
+  provisioner "file" {
+  source = "provisioner.sh"
+  destination = "/tmp/provisioner.sh"
+}
+
+  provisioner "shell" {
+    inline = ["chmod a+x /tmp/provisioner.sh"]
+  }
+  
+  provisioner "shell" {
+    inline = [ "ls -la /tmp"]
+  }
+  
+    provisioner "shell" {
+    inline = [ "pwd"]
+  }
+  
+  provisioner "shell" {
+    inline = ["/tmp/provisioner.sh"]
+  }
+}
       
 
 
     
-}
+
