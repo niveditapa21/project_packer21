@@ -1,5 +1,5 @@
-
-    "builders":[
+{
+    "builders": [
         {
 
         "type": "amazon-ebs",
@@ -18,11 +18,7 @@
         }
         
 
-
-
-
-
-    ],
+     ],
     
     "provisioners": [
         {
